@@ -1,4 +1,4 @@
-package service
+package app
 
 import (
 	"time"
@@ -6,29 +6,23 @@ import (
 	"github.com/my-storage/ms-profile/src/presentation"
 )
 
-type IService interface {
-	Start()
-	Stop()
-}
-
-type Service struct {
-	IService
+type App struct {
 	StartAt time.Time
 
 	Presentation presentation.Presentation
 }
 
-func New() Service {
-	return Service{
+func New() App {
+	return App{
 		StartAt:      time.Now(),
 		Presentation: presentation.New(),
 	}
 }
 
-func (srv *Service) Start() {
+func (srv *App) Start() {
 	srv.Presentation.HttpServer.Start()
 }
 
-func (srv *Service) Stop() {
+func (srv *App) Stop() {
 	srv.Presentation.Destroy()
 }

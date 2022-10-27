@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/my-storage/ms-profile/src/service"
+	"github.com/my-storage/ms-profile/src/app"
 )
 
 func main() {
-	service := service.New()
+	app := app.New()
 
-	service.Start()
+	app.Start()
 }
