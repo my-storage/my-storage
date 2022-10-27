@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,11 +12,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/my-storage/ms-profile/src/app/config"
 	v1 "github.com/my-storage/ms-profile/src/presentation/http/controllers/v1"
+	"github.com/my-storage/ms-profile/src/shared/infra/http/gin/helpers"
 )
 
 func New() *HttpServer {
+	setupConfig()
+
 	httpServer := createServer()
+	httpServer.SetupBaseMiddlewares()
+
 	router := httpServer.Router.Group("/api")
 
 	v1.Register(router)
@@ -31,12 +38,12 @@ type HttpServer struct {
 }
 
 func createServer() *HttpServer {
-	router := gin.Default()
+	router := gin.New()
 
-	// gin.SetMode(gin.ReleaseMode)
+	config := config.GetInstance()
 
 	srv := &http.Server{
-		Addr:    ":3000",
+		Addr:    fmt.Sprintf("%v:%v", config.ServerAddress, config.HttpPort),
 		Handler: router,
 	}
 
@@ -46,10 +53,22 @@ func createServer() *HttpServer {
 	}
 }
 
+func setupConfig() {
+	config := config.GetInstance()
+
+	if config.ApiMode == "debug" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+}
+
 func (httpServer *HttpServer) Start() {
 	go func() {
+		log.Printf("Server listen at %v\n", httpServer.Server.Addr)
+
 		if err := httpServer.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			log.Fatalf("Server could not start: %v", err)
 		}
 	}()
 
@@ -75,4 +94,7 @@ func (httpServer *HttpServer) Stop() {
 	httpServer.SignalChan <- syscall.SIGTERM
 }
 
-// TODO Metodo de Setup de Middlewares
+func (httpServer *HttpServer) SetupBaseMiddlewares() {
+	httpServer.Router.Use(helpers.LogFormatter())
+	httpServer.Router.Use(helpers.ErrorHandler())
+}
