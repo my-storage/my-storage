@@ -4,6 +4,7 @@ import netHttp "net/http"
 
 type Response struct {
 	Data       any
-	Header     netHttp.Header
+	Redirect   string
+	Headers    netHttp.Header
 	StatusCode int
 }

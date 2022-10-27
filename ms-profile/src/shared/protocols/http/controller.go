@@ -1,5 +1,5 @@
 package http
 
-type Controller[Body, Query any] interface {
-	Handler(request Request[Body, Query]) Response
+type Controller[Body any] interface {
+	Handler(request Request[Body]) Response
 }
