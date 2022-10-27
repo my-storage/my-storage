@@ -3,11 +3,11 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 
-	protocols "github.com/my-storage/ms-profile/src/shared/protocols/http"
+	protocols "github.com/my-storage/ms-profile/src/shared/infra/http/gin"
 )
 
 func Register(router *gin.RouterGroup) {
-	auth := router.Group("/auth")
+	group := router.Group("/auth")
 
-	auth.POST("/", protocols.GinAdapter(makeLoginController()))
+	group.POST("/", protocols.GinAdapter(makeLoginController()))
 }

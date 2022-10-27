@@ -12,14 +12,14 @@ type RegisterProfileControllerBody struct {
 }
 
 type RegisterProfileController struct {
-	protocols.Controller[RegisterProfileControllerBody, any]
+	protocols.Controller[RegisterProfileControllerBody]
 }
 
-func makeRegisterProfileController() protocols.Controller[RegisterProfileControllerBody, any] {
+func makeRegisterProfileController() protocols.Controller[RegisterProfileControllerBody] {
 	return &RegisterProfileController{}
 }
 
-func (a *RegisterProfileController) Handler(request protocols.Request[RegisterProfileControllerBody, any]) protocols.Response {
+func (a *RegisterProfileController) Handler(request protocols.Request[RegisterProfileControllerBody]) protocols.Response {
 	return protocols.Response{
 		Data:       request.Body,
 		StatusCode: http.StatusOK,

@@ -12,14 +12,14 @@ type UpdateProfileControllerBody struct {
 }
 
 type UpdateProfileController struct {
-	protocols.Controller[UpdateProfileControllerBody, any]
+	protocols.Controller[UpdateProfileControllerBody]
 }
 
-func makeUpdateProfileController() protocols.Controller[UpdateProfileControllerBody, any] {
+func makeUpdateProfileController() protocols.Controller[UpdateProfileControllerBody] {
 	return &UpdateProfileController{}
 }
 
-func (a *UpdateProfileController) Handler(request protocols.Request[UpdateProfileControllerBody, any]) protocols.Response {
+func (a *UpdateProfileController) Handler(request protocols.Request[UpdateProfileControllerBody]) protocols.Response {
 	return protocols.Response{
 		Data:       request.Body,
 		StatusCode: http.StatusOK,

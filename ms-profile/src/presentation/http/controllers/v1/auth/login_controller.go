@@ -7,23 +7,19 @@ import (
 )
 
 type LoginControllerBody struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
-
-// type LoginControllerQuery struct {
-// 	Ids string `form:"ids" binding:"required"`
-// }
 
 type LoginController struct {
-	protocols.Controller[LoginControllerBody, any]
+	protocols.Controller[LoginControllerBody]
 }
 
-func makeLoginController() protocols.Controller[LoginControllerBody, any] {
+func makeLoginController() protocols.Controller[LoginControllerBody] {
 	return &LoginController{}
 }
 
-func (a *LoginController) Handler(request protocols.Request[LoginControllerBody, any]) protocols.Response {
+func (a *LoginController) Handler(request protocols.Request[LoginControllerBody]) protocols.Response {
 	return protocols.Response{
 		Data:       request.Body,
 		StatusCode: http.StatusOK,

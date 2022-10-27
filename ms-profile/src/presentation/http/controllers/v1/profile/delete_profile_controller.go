@@ -12,14 +12,14 @@ type DeleteProfileControllerBody struct {
 }
 
 type DeleteProfileController struct {
-	protocols.Controller[DeleteProfileControllerBody, any]
+	protocols.Controller[DeleteProfileControllerBody]
 }
 
-func makeDeleteProfileController() protocols.Controller[DeleteProfileControllerBody, any] {
+func makeDeleteProfileController() protocols.Controller[DeleteProfileControllerBody] {
 	return &DeleteProfileController{}
 }
 
-func (a *DeleteProfileController) Handler(request protocols.Request[DeleteProfileControllerBody, any]) protocols.Response {
+func (a *DeleteProfileController) Handler(request protocols.Request[DeleteProfileControllerBody]) protocols.Response {
 	return protocols.Response{
 		Data:       request.Body,
 		StatusCode: http.StatusOK,
