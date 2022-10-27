@@ -8,12 +8,13 @@ import (
 type ErrorName string
 
 const (
-	UnprocessableEntity ErrorName = "UnprocessableEntity"
-	NotFound            ErrorName = "NotFound"
-	Forbidden           ErrorName = "Forbidden"
-	Unauthorized        ErrorName = "Unauthorized"
-	BadRequest          ErrorName = "BadRequest"
-	InternalServerError ErrorName = "InternalServerError"
+	UnprocessableEntity   ErrorName = "UnprocessableEntity"
+	NotFound              ErrorName = "NotFound"
+	Forbidden             ErrorName = "Forbidden"
+	Unauthorized          ErrorName = "Unauthorized"
+	BadRequest            ErrorName = "BadRequest"
+	InternalServerError   ErrorName = "InternalServerError"
+	RequestEntityTooLarge ErrorName = "RequestEntityTooLarge"
 )
 
 type AppError struct {
@@ -50,6 +51,8 @@ func (e *AppError) GetStatusCode() *int {
 		code = http.StatusBadRequest
 	case InternalServerError:
 		code = http.StatusInternalServerError
+	case RequestEntityTooLarge:
+		code = http.StatusRequestEntityTooLarge
 	default:
 		return nil
 	}

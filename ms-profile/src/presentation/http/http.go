@@ -85,5 +85,9 @@ func (httpServer *HttpServer) Stop() {
 
 func (httpServer *HttpServer) SetupBaseMiddlewares() {
 	httpServer.Router.Use(helpers.LogFormatter())
-	httpServer.Router.Use(helpers.ErrorHandler())
+	httpServer.Router.Use(helpers.SecurityHeadersMiddleware())
+	httpServer.Router.Use(helpers.CorsMiddleware())
+	httpServer.Router.Use(helpers.ContentSizeMiddleware())
+
+	httpServer.Router.Use(helpers.ErrorHandler()) // Need to be at end
 }

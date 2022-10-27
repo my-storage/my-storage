@@ -40,6 +40,10 @@ func decodeBody(target any, source io.Reader) {
 		result := make(map[string]string)
 
 		if err := decoder.Decode(target); err != nil && err != io.EOF {
+			if _, ok := err.(*http.MaxBytesError); ok {
+				panic(errors.New(errors.RequestEntityTooLarge, "The request's size exceeds the server's size limit.", nil))
+			}
+
 			error := err.(*json.UnmarshalTypeError)
 
 			expectedType, err := utils.GetObjectJSONType(error.Type)
@@ -60,8 +64,8 @@ func decodeBody(target any, source io.Reader) {
 
 func validateBody(obj any, validate *validator.Validate) {
 	if obj != nil {
-		validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
-			name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+		validate.RegisterTagNameFunc(func(field reflect.StructField) string {
+			name := strings.SplitN(field.Tag.Get("json"), ",", 2)[0]
 			if name == "-" {
 				return ""
 			}
