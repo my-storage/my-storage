@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/my-storage/ms-profile/src/service/config"
+	"github.com/my-storage/ms-profile/src/app/config"
 )
 
 type MongoDB struct {
