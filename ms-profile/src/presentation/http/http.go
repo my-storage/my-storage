@@ -14,12 +14,11 @@ import (
 
 	"github.com/my-storage/ms-profile/src/app/config"
 	v1 "github.com/my-storage/ms-profile/src/presentation/http/controllers/v1"
+	ginAdapter "github.com/my-storage/ms-profile/src/shared/infra/http/gin"
 	"github.com/my-storage/ms-profile/src/shared/infra/http/gin/helpers"
 )
 
 func New() *HttpServer {
-	setupConfig()
-
 	httpServer := createServer()
 	httpServer.SetupBaseMiddlewares()
 
@@ -38,7 +37,7 @@ type HttpServer struct {
 }
 
 func createServer() *HttpServer {
-	router := gin.New()
+	router := ginAdapter.NewGinEngine()
 
 	config := config.GetInstance()
 
@@ -50,16 +49,6 @@ func createServer() *HttpServer {
 	return &HttpServer{
 		Server: srv,
 		Router: router,
-	}
-}
-
-func setupConfig() {
-	config := config.GetInstance()
-
-	if config.ApiMode == "debug" {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
 	}
 }
 

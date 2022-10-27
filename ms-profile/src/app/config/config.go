@@ -5,6 +5,7 @@ import (
 )
 
 type Config struct {
+	Environment     string `env:"ENVIRONMENT"`
 	MongoDbUrl      string `env:"MONGO_DB_URL"`
 	MongoDbUsername string `env:"MONGO_DB_USERNAME"`
 	MongoDbPassword string `env:"MONGO_DB_PASSWORD"`

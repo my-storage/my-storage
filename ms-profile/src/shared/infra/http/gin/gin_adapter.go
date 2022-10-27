@@ -6,9 +6,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 
+	"github.com/my-storage/ms-profile/src/app/config"
 	"github.com/my-storage/ms-profile/src/shared/infra/http/gin/helpers"
 	protocols "github.com/my-storage/ms-profile/src/shared/protocols/http"
 )
+
+func NewGinEngine() *gin.Engine {
+	config := config.GetInstance()
+
+	if config.ApiMode == "debug" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	router := gin.New()
+
+	return router
+}
 
 func GinAdapter[Body any](controller protocols.Controller[Body]) func(c *gin.Context) {
 	validate := validator.New()
