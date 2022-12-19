@@ -7,7 +7,6 @@ import (
 	"github.com/go-playground/validator/v10"
 
 	"github.com/my-storage/ms-profile/src/app/config"
-	"github.com/my-storage/ms-profile/src/shared/infra/http/gin/helpers"
 	protocols "github.com/my-storage/ms-profile/src/shared/protocols/http"
 )
 
@@ -31,7 +30,7 @@ func GinAdapter[Body any](controller protocols.Controller[Body]) func(c *gin.Con
 	return func(c *gin.Context) {
 		param := c.Param
 		query := c.Query
-		body := helpers.GetBody[Body](c, validate)
+		body := GetBody[Body](c, validate)
 
 		httpRequest := protocols.Request[Body]{
 			Body:  body,
@@ -42,7 +41,7 @@ func GinAdapter[Body any](controller protocols.Controller[Body]) func(c *gin.Con
 		httpResponse := controller.Handler(httpRequest)
 
 		if httpResponse.Headers != nil {
-			helpers.SetHeaders(c, httpResponse.Headers)
+			SetHeaders(c, httpResponse.Headers)
 		}
 
 		if httpResponse.Data != nil {

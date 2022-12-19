@@ -20,14 +20,29 @@ const (
 type AppError struct {
 	Description string
 	Name        ErrorName
-	Details     *any
+	Details     any
 }
 
-func New(name ErrorName, description string, details any) error {
+func New(description string, details any) error {
+	return &AppError{
+		Description: description,
+		Details:     details,
+	}
+}
+
+func NewFromError(mainDescription string, errs ...any) error {
+	mainError := &AppError{Description: mainDescription}
+
+	err := fmt.Errorf(mainError.Error(), errs)
+
+	return err
+}
+
+func NewHttpError(name ErrorName, description string, details any) error {
 	return &AppError{
 		Description: description,
 		Name:        name,
-		Details:     &details,
+		Details:     details,
 	}
 }
 
@@ -49,12 +64,13 @@ func (e *AppError) GetStatusCode() *int {
 		code = http.StatusUnauthorized
 	case BadRequest:
 		code = http.StatusBadRequest
-	case InternalServerError:
-		code = http.StatusInternalServerError
 	case RequestEntityTooLarge:
 		code = http.StatusRequestEntityTooLarge
+	case InternalServerError:
+		code = http.StatusInternalServerError
 	default:
-		return nil
+		defaultCode := http.StatusInternalServerError
+		return &defaultCode
 	}
 
 	return &code

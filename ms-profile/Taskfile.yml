@@ -1,0 +1,41 @@
+version: '3'
+
+vars:
+  APPLICATION_NAME: "ms-profile"
+
+tasks:
+  run:dev:
+    desc: Run application as development
+    cmds:
+      - go run src/main.go
+
+  build:
+    desc: Build application
+    cmds:
+      - mkdir -p dist/
+      - go build -o dist/{{.APPLICATION_NAME}} -v src/main.go
+
+  run:dist:
+    desc: Run application as dist
+    cmds:
+      - ./dist/{{.APPLICATION_NAME}}
+
+  test:
+    desc: Run application unit tests
+    cmds:
+      - go test -v ./...
+
+  test:ci:
+    desc: Run application unit tests with coverage file in "tmp/coverage.out"
+    cmds:
+      - mkdir -p tmp/
+      - go test ./... -coverprofile=tmp/coverage.out
+      - go tool cover -func=tmp/coverage.out
+
+  test:ci:html:
+    desc: Run application unit tests with coverage file in "tmp/coverage.out"
+    cmds:
+      - mkdir -p tmp/
+      - go test ./... -coverprofile=tmp/coverage.out
+      - go tool cover -html=tmp/coverage.out
+

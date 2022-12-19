@@ -42,7 +42,6 @@ func setup() Config {
 			if bindingValue != "optional" {
 				log.Fatalf("Error on read value from env, 'env' tag '%v' in field '%v' on Config struct, not exist on env file", envKey, fieldName)
 			}
-
 		}
 
 		val.FieldByName(fieldName).SetString(envValue)

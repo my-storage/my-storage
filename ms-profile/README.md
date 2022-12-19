@@ -15,3 +15,11 @@ Run service in Development
 ```bash
 go run src/main.go
 ```
+
+#### Testing
+
+Run service in Development
+
+```bash
+go test ./...
+```

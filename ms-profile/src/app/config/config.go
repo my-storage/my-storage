@@ -7,6 +7,9 @@ import (
 type Config struct {
 	Environment string `env:"ENVIRONMENT"`
 
+	JwtKey               string `env:"JWT_KEY"`
+	JwtExpirationMinutes string `env:"JWT_EXPIRATION_MINUTES"`
+
 	AppName       string `env:"APP_NAME"`
 	ApiMode       string `env:"API_MODE" binding:"optional"`
 	ServerAddress string `env:"SERVER_ADDRESS"`

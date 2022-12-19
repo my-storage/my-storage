@@ -1,4 +1,4 @@
-package helpers
+package gin
 
 import (
 	"encoding/json"
@@ -41,21 +41,21 @@ func decodeBody(target any, source io.Reader) {
 
 		if err := decoder.Decode(target); err != nil && err != io.EOF {
 			if _, ok := err.(*http.MaxBytesError); ok {
-				panic(errors.New(errors.RequestEntityTooLarge, "The request's size exceeds the server's size limit.", nil))
+				panic(errors.NewHttpError(errors.RequestEntityTooLarge, "The request's size exceeds the server's size limit.", nil))
 			}
 
 			error := err.(*json.UnmarshalTypeError)
 
 			expectedType, err := utils.GetObjectJSONType(error.Type)
 			if err != nil {
-				panic(errors.New(errors.BadRequest, err.Error(), nil))
+				panic(errors.NewHttpError(errors.BadRequest, err.Error(), nil))
 			}
 
 			message := fmt.Sprintf("Invalid type on field '%v', expected type '%v' but received '%v'", error.Field, *expectedType, error.Value)
 
 			result[error.Field] = message
 
-			panic(errors.New(errors.BadRequest, "Invalid fields", map[string]any{
+			panic(errors.NewHttpError(errors.BadRequest, "Invalid fields", map[string]any{
 				"invalid": result,
 			}))
 		}
@@ -91,13 +91,13 @@ func validateBody(obj any, validate *validator.Validate) {
 					message = fmt.Sprintf("Field '%v' is required", key)
 				} else {
 					receivedType := reflect.TypeOf(err.Value())
-					message = fmt.Sprintf("Invalid type on field '%v', expected type '%v' but received '%v'", key, expectation, receivedType)
+					message = fmt.Sprintf("Invalid validation on field '%v', expected validate '%v' and received '%v'", key, expectation, receivedType)
 				}
 
 				result[key] = message
 			}
 
-			panic(errors.New(errors.BadRequest, "Invalid fields", map[string]any{
+			panic(errors.NewHttpError(errors.BadRequest, "Invalid fields", map[string]any{
 				"invalid": result,
 			}))
 

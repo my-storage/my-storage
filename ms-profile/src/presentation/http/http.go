@@ -15,7 +15,6 @@ import (
 	"github.com/my-storage/ms-profile/src/app/config"
 	v1 "github.com/my-storage/ms-profile/src/presentation/http/controllers/v1"
 	ginAdapter "github.com/my-storage/ms-profile/src/shared/infra/http/gin"
-	"github.com/my-storage/ms-profile/src/shared/infra/http/gin/helpers"
 )
 
 func New() *HttpServer {
@@ -84,10 +83,10 @@ func (httpServer *HttpServer) Stop() {
 }
 
 func (httpServer *HttpServer) SetupBaseMiddlewares() {
-	httpServer.Router.Use(helpers.LogFormatter())
-	httpServer.Router.Use(helpers.SecurityHeadersMiddleware())
-	httpServer.Router.Use(helpers.CorsMiddleware())
-	httpServer.Router.Use(helpers.ContentSizeMiddleware())
+	httpServer.Router.Use(ginAdapter.LogFormatter())
+	httpServer.Router.Use(ginAdapter.SecurityHeadersMiddleware())
+	httpServer.Router.Use(ginAdapter.CorsMiddleware())
+	httpServer.Router.Use(ginAdapter.ContentSizeMiddleware())
 
-	httpServer.Router.Use(helpers.ErrorHandler()) // Need to be at end
+	httpServer.Router.Use(ginAdapter.ErrorHandler()) // Need to be at end
 }
